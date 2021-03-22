@@ -2,6 +2,8 @@ package com.klim.daggersample
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
+import androidx.multidex.MultiDex
 import com.klim.daggersample.ui.di.AppComponent
 import com.klim.daggersample.ui.di.DaggerAppComponent
 import dagger.android.DispatchingAndroidInjector
@@ -26,5 +28,10 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         appComponent.inject(this)
+    }
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        MultiDex.install(this)
     }
 }
