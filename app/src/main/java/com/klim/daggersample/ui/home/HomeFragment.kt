@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.klim.daggersample.App
 import com.klim.daggersample.R
+import com.klim.daggersample.databinding.FragmentHomeBinding
 import javax.inject.Inject
 
 class HomeFragment : Fragment() {
@@ -17,6 +19,7 @@ class HomeFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: HomeViewModel
+    lateinit var binding: FragmentHomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,12 +32,12 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
-        val textView: TextView = root.findViewById(R.id.text_home)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+
         viewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
+            binding.textHome.text = it
         })
 
-        return root
+        return binding.root
     }
 }
