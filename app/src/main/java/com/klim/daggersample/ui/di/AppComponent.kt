@@ -2,6 +2,9 @@ package com.klim.daggersample.ui.di
 
 import android.app.Application
 import com.klim.daggersample.App
+import com.klim.daggersample.data.di.DataModule
+import com.klim.daggersample.data.di.RetrofitModule
+import com.klim.daggersample.domain.di.DomainModule
 import com.klim.daggersample.ui.MainActivity
 import com.klim.daggersample.ui.gallery.GalleryFragment
 import com.klim.daggersample.ui.home.HomeFragment
@@ -21,7 +24,9 @@ import javax.inject.Singleton
 @Component(
     modules = [
         ViewModelModule::class,
-//        ActivityModule::class,
+        DomainModule::class,
+        DataModule::class,
+        RetrofitModule::class,
     ]
 )
 @Singleton

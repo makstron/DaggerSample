@@ -9,9 +9,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.klim.daggersample.App
 import com.klim.daggersample.R
 import com.klim.daggersample.databinding.FragmentHomeBinding
+import com.klim.koinsample.ui.home.PostAdapter
 import javax.inject.Inject
 
 class HomeFragment : Fragment() {
@@ -20,6 +22,9 @@ class HomeFragment : Fragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: HomeViewModel
     lateinit var binding: FragmentHomeBinding
+
+    val adapter: PostAdapter = PostAdapter()
+    lateinit var layoutManager: LinearLayoutManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,13 +36,26 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+        layoutManager = LinearLayoutManager(context)
 
-        viewModel.text.observe(viewLifecycleOwner, Observer {
-            binding.textHome.text = it
+        binding.rvPosts.adapter = adapter
+        binding.rvPosts.layoutManager = layoutManager
+
+        viewModel.posts.observe(viewLifecycleOwner, { list ->
+            adapter.data.clear()
+            adapter.data.addAll(list)
+            adapter.notifyDataSetChanged()
         })
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if (savedInstanceState == null) {
+            viewModel.updatePosts()
+        }
     }
 }
